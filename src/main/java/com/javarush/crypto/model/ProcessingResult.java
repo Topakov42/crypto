@@ -1,20 +1,20 @@
 package com.javarush.crypto.model;
 
 public class ProcessingResult {
-    private final boolean succes;
-    private final String message;
-    private final String inputPreview;
-    private final String outputPreview;
+    private final boolean success;  // Успешное выполнение операции
+    private final String message;  // сообщение для пользователя
+    private final String inputPreview;   // Что на входе
+    private final String outputPreview;  // Что на выходе
 
-    public ProcessingResult(boolean succes, String message, String inputPreview, String outputPreview) {
-        this.succes = succes;
+    public ProcessingResult(boolean success, String message, String inputPreview, String outputPreview) {
+        this.success = success;
         this.message = message;
         this.inputPreview = inputPreview;
         this.outputPreview = outputPreview;
     }
 
-    public boolean isSucces() {
-        return succes;
+    public boolean isSuccess() {
+        return success;
     }
 
     public String getMessage() {
@@ -23,6 +23,17 @@ public class ProcessingResult {
 
     public String getInputPreview() {
         return inputPreview;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ProcessingResult{" +
+                "success=" + success +
+                ", message='" + message + '\'' +
+                ", inputPreview='" + inputPreview + '\'' +
+                ", outputPreview='" + outputPreview + '\'' +
+                '}';
     }
 
     public String getOutputPreview() {

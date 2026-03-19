@@ -2,31 +2,61 @@ package com.javarush.crypto.service;
 
 import com.javarush.crypto.exception.CipherException;
 
-import javax.annotation.processing.FilerException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 public class FileService {
     public String readFile(String filePath) throws CipherException {
-// чтение файла с валидацией
-        // 1 преобразовать путь в PAth
-        // 2 проверить существование файла
-        // 3 проверить права на чтение
-        // 4 проверить содержимое
-        // 5 обработать IOExp
-        return null;
 
+        try {
+            Path path = Paths.get(filePath);
+
+            if (!Files.exists(path)) {
+                throw new CipherException(String.format("Файла '%s'  не существует", filePath));
+            }
+
+            if (!Files.isReadable(path)) {
+                throw new CipherException(String.format("Ошибка чтения файла ' %s' ", filePath));
+            }
+
+            if (Files.size(path) == 0) {
+                throw new CipherException(String.format("Файл %s пустой", filePath));
+            }
+            return Files.readString(path);
+        } catch (IOException e) {
+            throw new CipherException("Ошибка чтения файла:  " + e.getMessage(), e);
+        }
     }
 
-    public void writeFail (String content, String filePath ) throws CipherException  {
+    public void writeFail(String content, String filePath) throws CipherException {
         // запись файла с созданием директории
         // 1 преобразовать путь
         // 2 создать род директории
         // 3 записать содержимое опциями
         // 4 обработать IoExpc
 
+
+        try {
+
+            Path path = Path.of(filePath);
+            Path parentDir = path.getParent();
+
+            if (parentDir != null && !Files.exists(parentDir)) {
+                Files.createDirectories(parentDir);
+            }
+            Files.writeString(path, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+
+        } catch (IOException e) {
+            throw new CipherException("Ошибка записи файла: " + e.getMessage(), e);
+        }
+
+
     }
 
-    public boolean fileExists (String filePath ) {
-        // проверка существования файла
-        return false;
+    public boolean fileExists(String filePath) {
+        return Files.exists(Path.of(filePath));
     }
 }

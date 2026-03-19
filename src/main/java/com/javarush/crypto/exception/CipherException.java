@@ -1,12 +1,16 @@
 package com.javarush.crypto.exception;
 
-public class CipherException  extends Exception {
-    public CipherException (String message) {
-        // вызвать конструктор родителя с сообщением
+public class CipherException extends Exception {
+
+
+    public CipherException(String message) {
+        super(message);
     }
 
-    public CipherException (String message, Throwable throwable) {
-        // вызвать конструктор родителя с ссообщением и причиной
+
+    //не проверяемые исключения
+    public CipherException(String message, Throwable throwable) {
+        super(message, throwable);
     }
 
 
