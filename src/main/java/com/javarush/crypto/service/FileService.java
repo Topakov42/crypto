@@ -32,11 +32,7 @@ public class FileService {
     }
 
     public void writeFail(String content, String filePath) throws CipherException {
-        // запись файла с созданием директории
-        // 1 преобразовать путь
-        // 2 создать род директории
-        // 3 записать содержимое опциями
-        // 4 обработать IoExpc
+
 
 
         try {

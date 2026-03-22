@@ -27,8 +27,7 @@ public class CryptoApp {
         CryptoApp cryptoApp = new CryptoApp(
                 new CipherCoder(new ValidationService()),
                 new FileService(),
-                new Scanner(System.in)
-        );
+                new Scanner(System.in));
         cryptoApp.run();
     }
 
@@ -98,11 +97,17 @@ public class CryptoApp {
 
 
     private void processDecodeFile() {
-        //обработка декодирования
-        // 1 получить пути
-        // 2 прочитать файл
-        // 3  декодировать морзе
-        //4 показать результат
+        try {
+            int key = keyValue();
+            String fileInput = getInputFilePath();
+            String context = fileService.readFile(fileInput);
+            ProcessingResult result = cipherCoder.encodeText(context, key);
+            fileService.writeFail(getOutputFromResult(result), fileOutput);
+
+            displaySucessResult(result, fileInput, fileOutput);
+        } catch (CipherException e) {
+            displayError(e.getMessage());
+        }
     }
 
 
@@ -112,16 +117,24 @@ public class CryptoApp {
         return fileName;
     }
 
-    private int keyValue() {
+    private int keyValue() throws CipherException {
         System.out.println("Введите значение ключа");
         int key = scanner.nextInt();
 
+
         if (Math.abs(key) > Math.abs(Alphabet.CIPHER_TO_TEXT.size())) {
-            System.out.format("Значение ключа не может быть больше значения алфавита - %s\n", Alphabet.TEXT_TO_CIPHER.size());
+            System.out.println("Значение ключа не может быть больше размера алфавита ");
             keyValue();
         }
-        scanner.nextLine();
+        if (key == 0 || key == Alphabet.CIPHER_TO_TEXT.size()) {
+            System.out.println("Значение ключа не может быть ровно 0 или размером алфавита - в этом нету смысла");
+            keyValue();
+        }
+
+
         System.out.println("Сдвиг на " + key);
+        scanner.nextLine();
+
         return key;
     }
 
@@ -149,14 +162,15 @@ public class CryptoApp {
 
 
     private void showAlphabetInfo() {
-        for (int i = 0; i <= Alphabet.CIPHER_TO_TEXT.size(); i++) {
-            System.out.format(" Ключ к символу - %s , Символ  - %s; ", i, Alphabet.CIPHER_TO_TEXT.get(String.valueOf(i)));
+        System.out.println("Размер алфавита:  " + Alphabet.TEXT_TO_CIPHER.size());
+        for (int i = 0; i < Alphabet.CIPHER_TO_TEXT.size(); i++) {
+            System.out.format(" Ключ к символу - %s , Символ  - ' %s ';\n ", i, Alphabet.CIPHER_TO_TEXT.get(String.valueOf(i)));
         }
     }
 
 
     private String getOutputFromResult(ProcessingResult processingResult) {
-        return processingResult.toString();
+        return processingResult.getOutputPreview();
     }
 }
 
