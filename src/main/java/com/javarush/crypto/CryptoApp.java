@@ -101,13 +101,15 @@ public class CryptoApp {
             int key = keyValue();
             String fileInput = getInputFilePath();
             String context = fileService.readFile(fileInput);
+            String fileOutput = getOutputFilePath();
             ProcessingResult result = cipherCoder.encodeText(context, key);
             fileService.writeFail(getOutputFromResult(result), fileOutput);
 
-            displaySucessResult(result, fileInput, fileOutput);
+            decodeSuccessResult(fileInput, fileOutput);
         } catch (CipherException e) {
             displayError(e.getMessage());
         }
+
     }
 
 
@@ -152,6 +154,14 @@ public class CryptoApp {
         System.out.println("Закодировали - " + fileInput);
         System.out.println("Получили  - " + fileOutput);
 
+    }
+
+
+    private void decodeSuccessResult(String fileInput, String fileOutput) {
+        // красивый вывод успех резульатта
+        System.out.println( "Текст успешно раскодирован");
+        System.out.println("Расшифровали - " + fileInput);
+        System.out.println("Получили  - " + fileOutput);
 
     }
 
